@@ -1,18 +1,10 @@
-
 import { GoogleGenAI } from "@google/genai";
 
-const API_KEY = process.env.API_KEY || "";
-
 export class AlehueConcierge {
-  private ai: GoogleGenAI;
-
-  constructor() {
-    this.ai = new GoogleGenAI({ apiKey: API_KEY });
-  }
-
   async getChatResponse(userMessage: string) {
     try {
-      const response = await this.ai.models.generateContent({
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+      const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: userMessage,
         config: {
@@ -33,7 +25,8 @@ export class AlehueConcierge {
 
   async generateMarketingImage(prompt: string) {
     try {
-      const response = await this.ai.models.generateContent({
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+      const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',
         contents: {
           parts: [
@@ -52,9 +45,11 @@ export class AlehueConcierge {
         }
       });
 
-      for (const part of response.candidates[0].content.parts) {
-        if (part.inlineData) {
-          return `data:image/png;base64,${part.inlineData.data}`;
+      if (response.candidates?.[0]?.content?.parts) {
+        for (const part of response.candidates[0].content.parts) {
+          if (part.inlineData) {
+            return `data:image/png;base64,${part.inlineData.data}`;
+          }
         }
       }
       return null;
