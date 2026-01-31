@@ -1,0 +1,7 @@
+{
+  "name": "Alehue - Bariloche Experience",
+  "description": "A high-end, modern redesign of the Alehue cabins in Bariloche, featuring an immersive UI and an AI-powered travel concierge.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
